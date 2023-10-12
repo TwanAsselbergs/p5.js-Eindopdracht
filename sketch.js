@@ -6,10 +6,22 @@ let stopButton;
 let timer = false;
 let timer2 = true;
 let coinCount = 0;
+let coinInterval;
 let gotchiPointsImage;
+let tamagotchiImage1;
+let tamagotchiImage2;
+let tamagotchiImage3;
+let tamagotchiImage4;
+let tamagotchiImage5;
+let concentratedImage;
 
 function preload() {
   gotchiPointsImage = loadImage("GotchiPoints.png");
+  tamagotchiImage1 = loadImage("1.png");
+  tamagotchiImage2 = loadImage("2.png");
+  tamagotchiImage3 = loadImage("3.png");
+  tamagotchiImage4 = loadImage("4.png");
+  tamagotchiImage5 = loadImage("5.png");
 }
 
 function setup() {
@@ -22,8 +34,6 @@ function setup() {
   if (coinCount == null) {
     coinCount = 0;
   }
-
-  setInterval(addCoin, 60 * 100);
 }
 
 function draw() {
@@ -39,6 +49,10 @@ function draw() {
 
   if (timer2) {
     m_Timer2 -= deltaTime / 1000;
+  }
+
+  if (m_Timer2 <= 0) {
+    m_Timer2 = 0;
   }
 
   fill(255, 192, 203);
@@ -86,6 +100,23 @@ function draw() {
     fill(0);
     textSize(35);
     text(minutesString + ":" + secondsString, 697, 500);
+  }
+
+  textSize(20);
+  text(m_Timer2, 50, 50);
+
+  if (m_Timer2 >= 50) {
+    image(tamagotchiImage2, 650, 200, 210, 210);
+  } else if (m_Timer2 >= 40) {
+    image(tamagotchiImage3, 645, 196, 210, 210);
+  } else if (m_Timer2 >= 30) {
+    image(tamagotchiImage4, 650, 200, 196, 196);
+  } else if (m_Timer2 < 30) {
+    image(tamagotchiImage5, 650, 200, 196, 196);
+  }
+
+  if (timer == true) {
+    image(tamagotchiImage1, 654, 202, 200, 200);
   }
 
   storeItem("timer", m_Timer);
@@ -142,18 +173,35 @@ function draw() {
   buttonReset25.style("font-weight", "bold");
   buttonReset25.mousePressed(onResetPressed);
 
-  // if (m_Timer <= 0) {
-  //   textSize(20);
-  //   text("Game over!", 689, 440);
-  // }
+  buttonBuy1 = createButton("Bread 10 Coins");
+  buttonBuy1.position(500, 250);
+  buttonBuy1.size(75, 35);
+  buttonBuy1.mousePressed(onBuyPressed1);
+
+  buttonBuy2 = createButton("Soup 25 Coins");
+  buttonBuy2.position(500, 290);
+  buttonBuy2.size(75, 35);
+  buttonBuy2.mousePressed(onBuyPressed2);
+
+  buttonBuy3 = createButton("Pizza 50 Coins");
+  buttonBuy3.position(500, 330);
+  buttonBuy3.size(75, 35);
+  buttonBuy3.mousePressed(onBuyPressed3);
+
+  buttonBuy4 = createButton("Sushi 100 Coins");
+  buttonBuy4.position(500, 370);
+  buttonBuy4.size(75, 35);
+  buttonBuy4.mousePressed(onBuyPressed4);
 }
 
 function onStartPressed() {
   timer = true;
+  coinInterval = setInterval(addCoin, 60 * 10); // make 60 * 1000 for 1 coin per minute
 }
 
 function onStopPressed() {
   timer = false;
+  clearInterval(coinInterval);
 }
 
 function onPlus5Pressed() {
@@ -176,8 +224,36 @@ function onResetPressed() {
   m_Timer = 25 * 60;
 }
 
+function onBuyPressed1() {
+  if (coinCount >= 10) {
+    coinCount -= 10;
+    m_Timer2 += 10;
+  }
+}
+
+function onBuyPressed2() {
+  if (coinCount >= 25) {
+    coinCount -= 25;
+    m_Timer2 += 25;
+  }
+}
+
+function onBuyPressed3() {
+  if (coinCount >= 50) {
+    coinCount -= 50;
+    m_Timer2 += 40;
+  }
+}
+
+function onBuyPressed4() {
+  if (coinCount >= 100) {
+    coinCount -= 100;
+    m_Timer2 += 60;
+  }
+}
+
 function addCoin() {
-  if (m_Timer > 0) {
+  if (timer && m_Timer > 0) {
     coinCount++;
   }
 }
