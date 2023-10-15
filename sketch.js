@@ -174,22 +174,22 @@ function draw() {
   buttonReset25.mousePressed(onResetPressed);
 
   buttonBuy1 = createButton("Bread 10 Coins");
-  buttonBuy1.position(500, 250);
+  buttonBuy1.position(510, 230);
   buttonBuy1.size(75, 35);
   buttonBuy1.mousePressed(onBuyPressed1);
 
   buttonBuy2 = createButton("Soup 25 Coins");
-  buttonBuy2.position(500, 290);
+  buttonBuy2.position(510, 270);
   buttonBuy2.size(75, 35);
   buttonBuy2.mousePressed(onBuyPressed2);
 
   buttonBuy3 = createButton("Pizza 50 Coins");
-  buttonBuy3.position(500, 330);
+  buttonBuy3.position(510, 310);
   buttonBuy3.size(75, 35);
   buttonBuy3.mousePressed(onBuyPressed3);
 
   buttonBuy4 = createButton("Sushi 100 Coins");
-  buttonBuy4.position(500, 370);
+  buttonBuy4.position(510, 350);
   buttonBuy4.size(75, 35);
   buttonBuy4.mousePressed(onBuyPressed4);
 }
