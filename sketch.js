@@ -1,11 +1,11 @@
 let m_Timer = 25 * 60;
-let m_Timer2 = 1 * 60;
+let m_Timer2 = 1 * 100;
 let backgroundImage;
 let startButton;
 let stopButton;
 let timer = false;
 let timer2 = true;
-let coinCount = 0;
+let coinCount = 999;
 let coinInterval;
 let gotchiPointsImage;
 let tamagotchiImage1;
@@ -16,8 +16,9 @@ let tamagotchiImage5;
 let breadImage;
 let soupImage;
 let pizzaImage;
-
-let buttonBuyBread;
+let showSoup = false;
+let showBread = false;
+let showPizza = false;
 
 function preload() {
   gotchiPointsImage = loadImage("GotchiPoints.png");
@@ -35,8 +36,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   backgroundImage = loadImage("TamagotchiBackground.jpg");
   m_Timer = getItem("timer");
-  m_Timer2 = getItem("timer2");
-  coinCount = getItem("coinCount");
+  // m_Timer2 = getItem("timer2");
+  // coinCount = getItem("coinCount");
 
   if (coinCount == null) {
     coinCount = 0;
@@ -134,20 +135,20 @@ function draw() {
   }
 
   textSize(20);
-  text(m_Timer2, 50, 50);
+  text(round(m_Timer2), 855, 195);
 
-  if (m_Timer2 >= 50) {
-    image(tamagotchiImage2, 650, 200, 210, 210);
+  if (m_Timer2 >= 80) {
+    image(tamagotchiImage2, 650, 180, 210, 210);
+  } else if (m_Timer2 >= 60) {
+    image(tamagotchiImage3, 645, 176, 215, 215);
   } else if (m_Timer2 >= 40) {
-    image(tamagotchiImage3, 645, 196, 210, 210);
-  } else if (m_Timer2 >= 30) {
-    image(tamagotchiImage4, 650, 200, 196, 196);
-  } else if (m_Timer2 < 30) {
-    image(tamagotchiImage5, 650, 200, 196, 196);
+    image(tamagotchiImage4, 650, 180, 196, 196);
+  } else if (m_Timer2 < 40) {
+    image(tamagotchiImage5, 650, 185, 196, 196);
   }
 
   if (timer == true) {
-    image(tamagotchiImage1, 654, 202, 200, 200);
+    image(tamagotchiImage1, 654, 182, 200, 200);
   }
 
   storeItem("timer", m_Timer);
@@ -159,6 +160,7 @@ function draw() {
   startButton = createButton("Start");
   startButton.position(560, 490);
   startButton.size(75, 35);
+  startButton.style("background-color", "white");
   startButton.style("font-size", "15px");
   startButton.style("border-radius", "100%");
   startButton.style("font-weight", "bold");
@@ -167,6 +169,7 @@ function draw() {
   stopButton = createButton("Stop");
   stopButton.position(860, 490);
   stopButton.size(75, 35);
+  stopButton.style("background-color", "white");
   stopButton.style("font-size", "15px");
   stopButton.style("border-radius", "100%");
   stopButton.style("font-weight", "bold");
@@ -175,6 +178,7 @@ function draw() {
   buttonPlus5 = createButton("+ 5");
   buttonPlus5.position(610, 540);
   buttonPlus5.size(75, 35);
+  buttonPlus5.style("background-color", "white");
   buttonPlus5.style("font-size", "15px");
   buttonPlus5.style("border-radius", "100%");
   buttonPlus5.style("font-weight", "bold");
@@ -183,6 +187,7 @@ function draw() {
   buttonPlus10 = createButton("+ 10");
   buttonPlus10.position(810, 540);
   buttonPlus10.size(75, 35);
+  buttonPlus10.style("background-color", "white");
   buttonPlus10.style("font-size", "15px");
   buttonPlus10.style("border-radius", "100%");
   buttonPlus10.style("font-weight", "bold");
@@ -191,6 +196,7 @@ function draw() {
   buttonReset0 = createButton("0");
   buttonReset0.position(660, 590);
   buttonReset0.size(75, 35);
+  buttonReset0.style("background-color", "white");
   buttonReset0.style("font-size", "15px");
   buttonReset0.style("border-radius", "100%");
   buttonReset0.style("font-weight", "bold");
@@ -199,6 +205,7 @@ function draw() {
   buttonReset25 = createButton("25");
   buttonReset25.position(760, 590);
   buttonReset25.size(75, 35);
+  buttonReset25.style("background-color", "white");
   buttonReset25.style("font-size", "15px");
   buttonReset25.style("border-radius", "100%");
   buttonReset25.style("font-weight", "bold");
@@ -207,6 +214,7 @@ function draw() {
   buttonShop = createButton("Shop");
   buttonShop.position(515, 215);
   buttonShop.size(75, 35);
+  buttonShop.style("background-color", "white");
   buttonShop.style("font-size", "15px");
   buttonShop.style("border-radius", "100%");
   buttonShop.style("font-weight", "bold");
@@ -223,6 +231,7 @@ function draw() {
     buttonShopClose = createButton("Close");
     buttonShopClose.position(515, 215);
     buttonShopClose.size(75, 35);
+    buttonShopClose.style("background-color", "white");
     buttonShopClose.style("font-size", "15px");
     buttonShopClose.style("border-radius", "100%");
     buttonShopClose.style("font-weight", "bold");
@@ -231,6 +240,16 @@ function draw() {
     buttonBuySoup.show();
     buttonBuyBread.show();
     buttonBuyPizza.show();
+  }
+
+  if (showSoup == true) {
+    image(soupImage, 660, 355, 55, 55);
+  }
+  if (showBread == true) {
+    image(breadImage, 730, 360, 50, 50);
+  }
+  if (showPizza == true) {
+    image(pizzaImage, 780, 355, 60, 60);
   }
 }
 
@@ -268,6 +287,7 @@ function onBuySoupPressed() {
   if (coinCount >= 25) {
     coinCount -= 25;
     m_Timer2 += 25;
+    showSoup = true;
   }
 }
 
@@ -275,6 +295,7 @@ function onBuyBreadPressed() {
   if (coinCount >= 50) {
     coinCount -= 50;
     m_Timer2 += 50;
+    showBread = true;
   }
 }
 
@@ -282,6 +303,7 @@ function onBuyPizzaPressed() {
   if (coinCount >= 100) {
     coinCount -= 100;
     m_Timer2 += 100;
+    showPizza = true;
   }
 }
 
@@ -298,6 +320,7 @@ function onShopPressed() {
 function onShopClosePressed() {
   buttonBuySoup.hide();
   buttonBuyBread.hide();
+  buttonBuyPizza.hide();
   showShop = false;
 }
 
