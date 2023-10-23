@@ -13,7 +13,11 @@ let tamagotchiImage2;
 let tamagotchiImage3;
 let tamagotchiImage4;
 let tamagotchiImage5;
-let concentratedImage;
+let breadImage;
+let soupImage;
+let pizzaImage;
+
+let buttonBuyBread;
 
 function preload() {
   gotchiPointsImage = loadImage("GotchiPoints.png");
@@ -22,6 +26,9 @@ function preload() {
   tamagotchiImage3 = loadImage("3.png");
   tamagotchiImage4 = loadImage("4.png");
   tamagotchiImage5 = loadImage("5.png");
+  breadImage = loadImage("Bread.png");
+  soupImage = loadImage("Soup.png");
+  pizzaImage = loadImage("Pizza.png");
 }
 
 function setup() {
@@ -34,6 +41,30 @@ function setup() {
   if (coinCount == null) {
     coinCount = 0;
   }
+
+  buttonBuySoup = createButton("");
+  buttonBuySoup.style("background-color", "transparent");
+  buttonBuySoup.style("border", "none");
+  buttonBuySoup.position(530, 275);
+  buttonBuySoup.size(40, 40);
+  buttonBuySoup.mousePressed(onBuySoupPressed);
+  buttonBuySoup.hide();
+
+  buttonBuyBread = createButton("");
+  buttonBuyBread.style("background-color", "transparent");
+  buttonBuyBread.style("border", "none");
+  buttonBuyBread.position(530, 320);
+  buttonBuyBread.size(40, 40);
+  buttonBuyBread.mousePressed(onBuyBreadPressed);
+  buttonBuyBread.hide();
+
+  buttonBuyPizza = createButton("");
+  buttonBuyPizza.style("background-color", "transparent");
+  buttonBuyPizza.style("border", "none");
+  buttonBuyPizza.position(530, 365);
+  buttonBuyPizza.size(40, 40);
+  buttonBuyPizza.mousePressed(onBuyPizzaPressed);
+  buttonBuyPizza.hide();
 }
 
 function draw() {
@@ -173,30 +204,39 @@ function draw() {
   buttonReset25.style("font-weight", "bold");
   buttonReset25.mousePressed(onResetPressed);
 
-  buttonBuy1 = createButton("Bread 10 Coins");
-  buttonBuy1.position(510, 230);
-  buttonBuy1.size(75, 35);
-  buttonBuy1.mousePressed(onBuyPressed1);
+  buttonShop = createButton("Shop");
+  buttonShop.position(515, 215);
+  buttonShop.size(75, 35);
+  buttonShop.style("font-size", "15px");
+  buttonShop.style("border-radius", "100%");
+  buttonShop.style("font-weight", "bold");
+  buttonShop.mousePressed(onShopPressed);
 
-  buttonBuy2 = createButton("Soup 25 Coins");
-  buttonBuy2.position(510, 270);
-  buttonBuy2.size(75, 35);
-  buttonBuy2.mousePressed(onBuyPressed2);
+  if (showShop == true) {
+    fill(255, 255, 255);
+    rect(513, 260, 75, 150, 20);
 
-  buttonBuy3 = createButton("Pizza 50 Coins");
-  buttonBuy3.position(510, 310);
-  buttonBuy3.size(75, 35);
-  buttonBuy3.mousePressed(onBuyPressed3);
+    image(soupImage, 532, 275, 35, 35);
+    image(breadImage, 532, 320, 35, 35);
+    image(pizzaImage, 530, 365, 40, 40);
 
-  buttonBuy4 = createButton("Sushi 100 Coins");
-  buttonBuy4.position(510, 350);
-  buttonBuy4.size(75, 35);
-  buttonBuy4.mousePressed(onBuyPressed4);
+    buttonShopClose = createButton("Close");
+    buttonShopClose.position(515, 215);
+    buttonShopClose.size(75, 35);
+    buttonShopClose.style("font-size", "15px");
+    buttonShopClose.style("border-radius", "100%");
+    buttonShopClose.style("font-weight", "bold");
+    buttonShopClose.mousePressed(onShopClosePressed);
+
+    buttonBuySoup.show();
+    buttonBuyBread.show();
+    buttonBuyPizza.show();
+  }
 }
 
 function onStartPressed() {
   timer = true;
-  coinInterval = setInterval(addCoin, 60 * 10); // make 60 * 1000 for 1 coin per minute
+  coinInterval = setInterval(addCoin, 60 * 1000);
 }
 
 function onStopPressed() {
@@ -224,31 +264,24 @@ function onResetPressed() {
   m_Timer = 25 * 60;
 }
 
-function onBuyPressed1() {
-  if (coinCount >= 10) {
-    coinCount -= 10;
-    m_Timer2 += 10;
-  }
-}
-
-function onBuyPressed2() {
+function onBuySoupPressed() {
   if (coinCount >= 25) {
     coinCount -= 25;
     m_Timer2 += 25;
   }
 }
 
-function onBuyPressed3() {
+function onBuyBreadPressed() {
   if (coinCount >= 50) {
     coinCount -= 50;
-    m_Timer2 += 40;
+    m_Timer2 += 50;
   }
 }
 
-function onBuyPressed4() {
+function onBuyPizzaPressed() {
   if (coinCount >= 100) {
     coinCount -= 100;
-    m_Timer2 += 60;
+    m_Timer2 += 100;
   }
 }
 
@@ -256,4 +289,18 @@ function addCoin() {
   if (timer && m_Timer > 0) {
     coinCount++;
   }
+}
+
+function onShopPressed() {
+  showShop = true;
+}
+
+function onShopClosePressed() {
+  buttonBuySoup.hide();
+  buttonBuyBread.hide();
+  showShop = false;
+}
+
+if ((showShop = false)) {
+  showShop = false;
 }
