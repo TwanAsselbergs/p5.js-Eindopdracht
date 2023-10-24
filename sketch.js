@@ -35,7 +35,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   backgroundImage = loadImage("TamagotchiBackground.jpg");
-  m_Timer = getItem("timer");
+  // m_Timer = getItem("timer");
   // m_Timer2 = getItem("timer2");
   // coinCount = getItem("coinCount");
 
@@ -244,12 +244,21 @@ function draw() {
 
   if (showSoup == true) {
     image(soupImage, 660, 355, 55, 55);
+    setTimeout(() => {
+      showSoup = false;
+    }, 25 * 1000);
   }
   if (showBread == true) {
     image(breadImage, 730, 360, 50, 50);
+    setTimeout(() => {
+      showBread = false;
+    }, 50 * 1000);
   }
   if (showPizza == true) {
     image(pizzaImage, 780, 355, 60, 60);
+    setTimeout(() => {
+      showPizza = false;
+    }, 100 * 1000);
   }
 }
 
