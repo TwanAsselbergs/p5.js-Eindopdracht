@@ -1,11 +1,11 @@
 let m_Timer = 25 * 60;
-let m_Timer2 = 1 * 100;
+let m_Timer2 = 1 * 250;
 let backgroundImage;
 let startButton;
 let stopButton;
 let timer = false;
 let timer2 = true;
-let coinCount = 999;
+let coinCount = 0;
 let coinInterval;
 let gotchiPointsImage;
 let tamagotchiImage1;
@@ -35,9 +35,9 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   backgroundImage = loadImage("TamagotchiBackground.jpg");
-  // m_Timer = getItem("timer");
-  // m_Timer2 = getItem("timer2");
-  // coinCount = getItem("coinCount");
+  m_Timer = getItem("timer");
+  m_Timer2 = getItem("timer2");
+  coinCount = getItem("coinCount");
 
   if (coinCount == null) {
     coinCount = 0;
@@ -137,13 +137,13 @@ function draw() {
   textSize(20);
   text(round(m_Timer2), 855, 195);
 
-  if (m_Timer2 >= 80) {
+  if (m_Timer2 >= 200) {
     image(tamagotchiImage2, 650, 180, 210, 210);
-  } else if (m_Timer2 >= 60) {
+  } else if (m_Timer2 >= 150) {
     image(tamagotchiImage3, 645, 176, 215, 215);
-  } else if (m_Timer2 >= 40) {
+  } else if (m_Timer2 >= 100) {
     image(tamagotchiImage4, 650, 180, 196, 196);
-  } else if (m_Timer2 < 40) {
+  } else if (m_Timer2 < 50) {
     image(tamagotchiImage5, 650, 185, 196, 196);
   }
 
@@ -260,11 +260,15 @@ function draw() {
       showPizza = false;
     }, 100 * 1000);
   }
+  if (m_Timer <= 0 && timer2) {
+    m_Timer2 += 100;
+    timer2 = false;
+  }
 }
 
 function onStartPressed() {
   timer = true;
-  coinInterval = setInterval(addCoin, 60 * 1000);
+  coinInterval = setInterval(addCoin, 10 * 1000);
 }
 
 function onStopPressed() {
