@@ -5,7 +5,7 @@ let startButton;
 let stopButton;
 let timer = false;
 let timer2 = true;
-let coinCount = 10;
+let coinCount = 0;
 let coinInterval;
 let gotchiPointsImage;
 let tamagotchiImage1;
@@ -204,8 +204,8 @@ function draw() {
     text(minutesString + ":" + secondsString, 697, 500);
   }
 
-  textSize(20);
-  text(round(m_Timer2), 855, 195);
+  // textSize(20);
+  // text(round(m_Timer2), 855, 195);
 
   buttonShop = createButton("Shop");
   buttonShop.position(515, 215);
