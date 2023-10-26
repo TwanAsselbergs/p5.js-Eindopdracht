@@ -1,11 +1,11 @@
 let m_Timer = 25 * 60;
-let m_Timer2 = 1 * 250;
+let m_Timer2 = 1 * 500;
 let backgroundImage;
 let startButton;
 let stopButton;
 let timer = false;
 let timer2 = true;
-let coinCount = 0;
+let coinCount = 50;
 let coinInterval;
 let gotchiPointsImage;
 let tamagotchiImage1;
@@ -19,6 +19,7 @@ let pizzaImage;
 let showSoup = false;
 let showBread = false;
 let showPizza = false;
+let reward = false;
 
 function preload() {
   gotchiPointsImage = loadImage("GotchiPoints.png");
@@ -87,6 +88,11 @@ function draw() {
     m_Timer2 = 0;
   }
 
+  if (m_Timer <= 0 && reward == false) {
+    m_Timer2 += 500;
+    reward = true;
+  }
+
   fill(255, 192, 203);
   ellipse(750, 60, 100, 100);
   fill(255, 255, 255);
@@ -137,11 +143,11 @@ function draw() {
   textSize(20);
   text(round(m_Timer2), 855, 195);
 
-  if (m_Timer2 >= 200) {
+  if (m_Timer2 >= 400) {
     image(tamagotchiImage2, 650, 180, 210, 210);
-  } else if (m_Timer2 >= 150) {
+  } else if (m_Timer2 >= 250) {
     image(tamagotchiImage3, 645, 176, 215, 215);
-  } else if (m_Timer2 >= 100) {
+  } else if (m_Timer2 >= 150) {
     image(tamagotchiImage4, 650, 180, 196, 196);
   } else if (m_Timer2 < 50) {
     image(tamagotchiImage5, 650, 185, 196, 196);
@@ -224,9 +230,15 @@ function draw() {
     fill(255, 255, 255);
     rect(513, 260, 75, 150, 20);
 
-    image(soupImage, 532, 275, 35, 35);
-    image(breadImage, 532, 320, 35, 35);
-    image(pizzaImage, 530, 365, 40, 40);
+    image(soupImage, 527, 275, 35, 35);
+    image(breadImage, 527, 320, 35, 35);
+    image(pizzaImage, 525, 365, 40, 40);
+
+    fill(0);
+    textSize(13);
+    text("10", 565, 282);
+    text("25", 565, 324);
+    text("50", 565, 374);
 
     buttonShopClose = createButton("Close");
     buttonShopClose.position(515, 215);
@@ -246,23 +258,19 @@ function draw() {
     image(soupImage, 660, 355, 55, 55);
     setTimeout(() => {
       showSoup = false;
-    }, 25 * 1000);
+    }, 10 * 1000);
   }
   if (showBread == true) {
     image(breadImage, 730, 360, 50, 50);
     setTimeout(() => {
       showBread = false;
-    }, 50 * 1000);
+    }, 25 * 1000);
   }
   if (showPizza == true) {
     image(pizzaImage, 780, 355, 60, 60);
     setTimeout(() => {
       showPizza = false;
-    }, 100 * 1000);
-  }
-  if (m_Timer <= 0 && timer2) {
-    m_Timer2 += 100;
-    timer2 = false;
+    }, 50 * 1000);
   }
 }
 
@@ -273,6 +281,7 @@ function onStartPressed() {
 
 function onStopPressed() {
   timer = false;
+  // m_Timer2 -= 500;
   clearInterval(coinInterval);
 }
 
@@ -293,29 +302,29 @@ function onEndPressed() {
 }
 
 function onResetPressed() {
-  m_Timer = 25 * 60;
+  m_Timer = 1 * 5;
 }
 
 function onBuySoupPressed() {
-  if (coinCount >= 25) {
-    coinCount -= 25;
-    m_Timer2 += 25;
+  if (coinCount >= 10) {
+    coinCount -= 10;
+    m_Timer2 += 100;
     showSoup = true;
   }
 }
 
 function onBuyBreadPressed() {
-  if (coinCount >= 50) {
-    coinCount -= 50;
-    m_Timer2 += 50;
+  if (coinCount >= 25) {
+    coinCount -= 25;
+    m_Timer2 += 250;
     showBread = true;
   }
 }
 
 function onBuyPizzaPressed() {
-  if (coinCount >= 100) {
-    coinCount -= 100;
-    m_Timer2 += 100;
+  if (coinCount >= 50) {
+    coinCount -= 50;
+    m_Timer2 += 500;
     showPizza = true;
   }
 }
