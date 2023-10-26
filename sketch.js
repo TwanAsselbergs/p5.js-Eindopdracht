@@ -1,11 +1,11 @@
-let m_Timer = 25 * 60;
-let m_Timer2 = 1 * 500;
+let PomodoriTimer = 25 * 60;
+let EmotionTimer = 1 * 500;
 let backgroundImage;
 let startButton;
 let stopButton;
 let timer = false;
 let timer2 = true;
-let coinCount = 0;
+let coinCount = 10;
 let coinInterval;
 let gotchiPointsImage;
 let tamagotchiImage1;
@@ -22,6 +22,7 @@ let showPizza = false;
 let reward = false;
 
 function preload() {
+  backgroundImage = loadImage("TamagotchiBackground.jpg");
   gotchiPointsImage = loadImage("GotchiPoints.png");
   tamagotchiImage1 = loadImage("1.png");
   tamagotchiImage2 = loadImage("2.png");
@@ -31,22 +32,14 @@ function preload() {
   breadImage = loadImage("Bread.png");
   soupImage = loadImage("Soup.png");
   pizzaImage = loadImage("Pizza.png");
-  backgroundImage = loadImage("TamagotchiBackground.jpg");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  if (localStorage.getItem("timer")) {
-    m_Timer = parseInt(localStorage.getItem("timer"));
-  }
-
-  if (localStorage.getItem("timer2")) {
-    m_Timer2 = parseInt(localStorage.getItem("timer2"));
-  }
-  if (localStorage.getItem("coinCount")) {
-    coinCount = parseInt(localStorage.getItem("coinCount"));
-  }
+  PomodoriTimer = parseInt(localStorage.getItem("timer"));
+  EmotionTimer = parseInt(localStorage.getItem("timer2"));
+  coinCount = parseInt(localStorage.getItem("coinCount"));
 
   strokeWeight(3);
 
@@ -137,23 +130,23 @@ function draw() {
   background(backgroundImage);
 
   if (timer) {
-    m_Timer -= deltaTime / 1000;
+    PomodoriTimer -= deltaTime / 1000;
   }
 
-  if (m_Timer <= 0) {
-    m_Timer = 0;
+  if (PomodoriTimer <= 0) {
+    PomodoriTimer = 0;
   }
 
   if (timer2) {
-    m_Timer2 -= deltaTime / 1000;
+    EmotionTimer -= deltaTime / 1000;
   }
 
-  if (m_Timer2 <= 0) {
-    m_Timer2 = 0;
+  if (EmotionTimer <= 0) {
+    EmotionTimer = 0;
   }
 
-  if (m_Timer <= 0 && reward == false) {
-    m_Timer2 += 250;
+  if (PomodoriTimer <= 0 && reward == false) {
+    EmotionTimer += 250;
     reward = true;
   }
 
@@ -181,8 +174,8 @@ function draw() {
   text(coinCount, 645, 195);
   image(gotchiPointsImage, 610, 175, 30, 30);
 
-  let minutes = floor(m_Timer / 60);
-  let seconds = floor(m_Timer % 60);
+  let minutes = floor(PomodoriTimer / 60);
+  let seconds = floor(PomodoriTimer % 60);
   let minutesString = minutes;
   let secondsString = seconds;
 
@@ -194,7 +187,7 @@ function draw() {
     secondsString = "0" + seconds;
   }
 
-  if (m_Timer >= 100 * 60) {
+  if (PomodoriTimer >= 100 * 60) {
     fill(0);
     textSize(35);
     text(minutesString + ":" + secondsString, 687, 500);
@@ -204,8 +197,8 @@ function draw() {
     text(minutesString + ":" + secondsString, 697, 500);
   }
 
-  // textSize(20);
-  // text(round(m_Timer2), 855, 195);
+  textSize(20);
+  text(round(EmotionTimer), 855, 195);
 
   buttonShop = createButton("Shop");
   buttonShop.position(515, 215);
@@ -216,23 +209,19 @@ function draw() {
   buttonShop.style("font-weight", "bold");
   buttonShop.mousePressed(onShopPressed);
 
-  if (m_Timer2 >= 400) {
+  if (EmotionTimer >= 400) {
     image(tamagotchiImage2, 650, 180, 210, 210);
-  } else if (m_Timer2 >= 250) {
+  } else if (EmotionTimer >= 250) {
     image(tamagotchiImage3, 645, 176, 215, 215);
-  } else if (m_Timer2 >= 150) {
+  } else if (EmotionTimer >= 150) {
     image(tamagotchiImage4, 650, 180, 196, 196);
-  } else if (m_Timer2 < 149) {
+  } else if (EmotionTimer < 149) {
     image(tamagotchiImage5, 650, 185, 196, 196);
   }
 
   if (timer == true) {
     image(tamagotchiImage1, 654, 182, 200, 200);
   }
-
-  storeItem("timer", m_Timer);
-  storeItem("timer2", m_Timer2);
-  storeItem("coinCount", coinCount);
 
   if (showShop == true) {
     fill(255, 255, 255);
@@ -281,8 +270,8 @@ function draw() {
     }, 50 * 1000);
   }
 
-  localStorage.setItem("timer", m_Timer);
-  localStorage.setItem("timer2", m_Timer2);
+  localStorage.setItem("timer", PomodoriTimer);
+  localStorage.setItem("timer2", EmotionTimer);
   localStorage.setItem("coinCount", coinCount);
 }
 
@@ -293,35 +282,34 @@ function onStartPressed() {
 
 function onStopPressed() {
   timer = false;
-  // m_Timer2 -= 500;
   clearInterval(coinInterval);
 }
 
 function onPlus5Pressed() {
-  if (m_Timer > 0) {
-    m_Timer += 5 * 60;
+  if (PomodoriTimer > 0) {
+    PomodoriTimer += 5 * 60;
   }
 }
 
 function onPlus10Pressed() {
-  if (m_Timer > 0) {
-    m_Timer += 10 * 60;
+  if (PomodoriTimer > 0) {
+    PomodoriTimer += 10 * 60;
   }
 }
 
 function onEndPressed() {
-  m_Timer = 0;
+  PomodoriTimer = 0;
   reward = false;
 }
 
 function onResetPressed() {
-  m_Timer = 25 * 60;
+  PomodoriTimer = 25 * 60;
 }
 
 function onBuySoupPressed() {
   if (coinCount >= 10) {
     coinCount -= 10;
-    m_Timer2 += 100;
+    EmotionTimer += 100;
     showSoup = true;
   }
 }
@@ -329,7 +317,7 @@ function onBuySoupPressed() {
 function onBuyBreadPressed() {
   if (coinCount >= 25) {
     coinCount -= 25;
-    m_Timer2 += 250;
+    EmotionTimer += 250;
     showBread = true;
   }
 }
@@ -337,13 +325,13 @@ function onBuyBreadPressed() {
 function onBuyPizzaPressed() {
   if (coinCount >= 50) {
     coinCount -= 50;
-    m_Timer2 += 500;
+    EmotionTimer += 500;
     showPizza = true;
   }
 }
 
 function addCoin() {
-  if (timer && m_Timer > 0) {
+  if (timer && PomodoriTimer > 0) {
     coinCount++;
   }
 }
