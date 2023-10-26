@@ -5,7 +5,7 @@ let startButton;
 let stopButton;
 let timer = false;
 let timer2 = true;
-let coinCount = 50;
+let coinCount = 10;
 let coinInterval;
 let gotchiPointsImage;
 let tamagotchiImage1;
@@ -89,7 +89,7 @@ function draw() {
   }
 
   if (m_Timer <= 0 && reward == false) {
-    m_Timer2 += 500;
+    m_Timer2 += 250;
     reward = true;
   }
 
