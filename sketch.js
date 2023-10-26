@@ -222,7 +222,7 @@ function draw() {
     image(tamagotchiImage3, 645, 176, 215, 215);
   } else if (EmotionTimer >= 150) {
     image(tamagotchiImage4, 650, 180, 196, 196);
-  } else if (EmotionTimer < 149) {
+  } else if (EmotionTimer < 150) {
     image(tamagotchiImage5, 650, 185, 196, 196);
   }
 
