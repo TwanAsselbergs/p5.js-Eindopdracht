@@ -5,7 +5,7 @@ let startButton;
 let stopButton;
 let timer = false;
 let timer2 = true;
-let coinCount = 10;
+let coinCount = 999;
 let coinInterval;
 let gotchiPointsImage;
 let tamagotchiImage1;
@@ -40,6 +40,7 @@ function setup() {
   PomodoriTimer = parseInt(localStorage.getItem("timer"));
   EmotionTimer = parseInt(localStorage.getItem("timer2"));
   coinCount = parseInt(localStorage.getItem("coinCount"));
+  showSoup = parseInt(localStorage.getItem("showSoup"));
 
   strokeWeight(3);
 
@@ -255,6 +256,7 @@ function draw() {
     image(soupImage, 660, 355, 55, 55);
     setTimeout(() => {
       showSoup = false;
+      localStorage.setItem("showSoup", showSoup);
     }, 10 * 1000);
   }
   if (showBread == true) {
@@ -273,6 +275,21 @@ function draw() {
   localStorage.setItem("timer", PomodoriTimer);
   localStorage.setItem("timer2", EmotionTimer);
   localStorage.setItem("coinCount", coinCount);
+
+  if (localStorage.getItem("showSoup") == "true") {
+    showSoup = true;
+  }
+  localStorage.setItem("showSoup", showSoup);
+
+  if (localStorage.getItem("showBread") == "true") {
+    showBread = true;
+  }
+  localStorage.setItem("showBread", showBread);
+
+  if (localStorage.getItem("showPizza") == "true") {
+    showPizza = true;
+  }
+  localStorage.setItem("showPizza", showPizza);
 }
 
 function onStartPressed() {
