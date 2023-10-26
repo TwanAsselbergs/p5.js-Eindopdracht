@@ -1,4 +1,4 @@
-let PomodoriTimer = 25 * 60;
+let PomodoroTimer = 25 * 60;
 let EmotionTimer = 1 * 500;
 let backgroundImage;
 let startButton;
@@ -16,10 +16,14 @@ let tamagotchiImage5;
 let breadImage;
 let soupImage;
 let pizzaImage;
-let showSoup = false;
-let showBread = false;
-let showPizza = false;
+let showShop = false;
 let reward = false;
+let showSoup = false;
+let showSoupTime = 0;
+let showBread = false;
+let showBreadTime = 0;
+let showPizza = false;
+let showPizzaTime = 0;
 
 function preload() {
   backgroundImage = loadImage("TamagotchiBackground.jpg");
@@ -36,11 +40,6 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  PomodoriTimer = parseInt(localStorage.getItem("timer"));
-  EmotionTimer = parseInt(localStorage.getItem("timer2"));
-  coinCount = parseInt(localStorage.getItem("coinCount"));
-  showSoup = parseInt(localStorage.getItem("showSoup"));
 
   strokeWeight(3);
 
@@ -98,10 +97,6 @@ function setup() {
   buttonReset25.style("font-weight", "bold");
   buttonReset25.mousePressed(onResetPressed);
 
-  if (coinCount == null) {
-    coinCount = 0;
-  }
-
   buttonBuySoup = createButton("");
   buttonBuySoup.style("background-color", "transparent");
   buttonBuySoup.style("border", "none");
@@ -125,17 +120,24 @@ function setup() {
   buttonBuyPizza.size(40, 40);
   buttonBuyPizza.mousePressed(onBuyPizzaPressed);
   buttonBuyPizza.hide();
+
+  PomodoroTimer = parseInt(localStorage.getItem("timer"));
+  EmotionTimer = parseInt(localStorage.getItem("timer2"));
+  coinCount = parseInt(localStorage.getItem("coinCount"));
+  showSoup = JSON.parse(localStorage.getItem("showSoup"));
+  showBread = JSON.parse(localStorage.getItem("showBread"));
+  showPizza = JSON.parse(localStorage.getItem("showPizza"));
 }
 
 function draw() {
   background(backgroundImage);
 
   if (timer) {
-    PomodoriTimer -= deltaTime / 1000;
+    PomodoroTimer -= deltaTime / 1000;
   }
 
-  if (PomodoriTimer <= 0) {
-    PomodoriTimer = 0;
+  if (PomodoroTimer <= 0) {
+    PomodoroTimer = 0;
   }
 
   if (timer2) {
@@ -146,9 +148,13 @@ function draw() {
     EmotionTimer = 0;
   }
 
-  if (PomodoriTimer <= 0 && reward == false) {
+  if (PomodoroTimer <= 0 && reward == false) {
     EmotionTimer += 250;
     reward = true;
+  }
+
+  if (coinCount == null) {
+    coinCount = 0;
   }
 
   fill(255, 192, 203);
@@ -175,8 +181,8 @@ function draw() {
   text(coinCount, 645, 195);
   image(gotchiPointsImage, 610, 175, 30, 30);
 
-  let minutes = floor(PomodoriTimer / 60);
-  let seconds = floor(PomodoriTimer % 60);
+  let minutes = floor(PomodoroTimer / 60);
+  let seconds = floor(PomodoroTimer % 60);
   let minutesString = minutes;
   let secondsString = seconds;
 
@@ -188,7 +194,7 @@ function draw() {
     secondsString = "0" + seconds;
   }
 
-  if (PomodoriTimer >= 100 * 60) {
+  if (PomodoroTimer >= 100 * 60) {
     fill(0);
     textSize(35);
     text(minutesString + ":" + secondsString, 687, 500);
@@ -199,7 +205,7 @@ function draw() {
   }
 
   textSize(20);
-  text(round(EmotionTimer), 855, 195);
+  text(round(EmotionTimer), 845, 195);
 
   buttonShop = createButton("Shop");
   buttonShop.position(515, 215);
@@ -252,44 +258,31 @@ function draw() {
     buttonBuyPizza.show();
   }
 
-  if (showSoup == true) {
+  if (showSoup) {
     image(soupImage, 660, 355, 55, 55);
-    setTimeout(() => {
+    if (millis() - showSoupTime >= 10 * 1000) {
       showSoup = false;
-      localStorage.setItem("showSoup", showSoup);
-    }, 10 * 1000);
+    }
   }
-  if (showBread == true) {
+  if (showBread) {
     image(breadImage, 730, 360, 50, 50);
-    setTimeout(() => {
+    if (millis() - showBreadTime >= 20 * 1000) {
       showBread = false;
-    }, 25 * 1000);
+    }
   }
-  if (showPizza == true) {
+  if (showPizza) {
     image(pizzaImage, 780, 355, 60, 60);
-    setTimeout(() => {
+    if (millis() - showPizzaTime >= 30 * 1000) {
       showPizza = false;
-    }, 50 * 1000);
+    }
   }
 
-  localStorage.setItem("timer", PomodoriTimer);
+  localStorage.setItem("timer", PomodoroTimer);
   localStorage.setItem("timer2", EmotionTimer);
   localStorage.setItem("coinCount", coinCount);
-
-  if (localStorage.getItem("showSoup") == "true") {
-    showSoup = true;
-  }
-  localStorage.setItem("showSoup", showSoup);
-
-  if (localStorage.getItem("showBread") == "true") {
-    showBread = true;
-  }
-  localStorage.setItem("showBread", showBread);
-
-  if (localStorage.getItem("showPizza") == "true") {
-    showPizza = true;
-  }
-  localStorage.setItem("showPizza", showPizza);
+  localStorage.setItem("showSoup", JSON.stringify(showSoup));
+  localStorage.setItem("showBread", JSON.stringify(showBread));
+  localStorage.setItem("showPizza", JSON.stringify(showPizza));
 }
 
 function onStartPressed() {
@@ -303,52 +296,55 @@ function onStopPressed() {
 }
 
 function onPlus5Pressed() {
-  if (PomodoriTimer > 0) {
-    PomodoriTimer += 5 * 60;
+  if (PomodoroTimer > 0) {
+    PomodoroTimer += 5 * 60;
   }
 }
 
 function onPlus10Pressed() {
-  if (PomodoriTimer > 0) {
-    PomodoriTimer += 10 * 60;
+  if (PomodoroTimer > 0) {
+    PomodoroTimer += 10 * 60;
   }
 }
 
 function onEndPressed() {
-  PomodoriTimer = 0;
+  PomodoroTimer = 0;
   reward = false;
 }
 
 function onResetPressed() {
-  PomodoriTimer = 25 * 60;
+  PomodoroTimer = 25 * 60;
 }
 
 function onBuySoupPressed() {
-  if (coinCount >= 10) {
+  if (coinCount >= 10 && showSoup == false) {
     coinCount -= 10;
     EmotionTimer += 100;
     showSoup = true;
+    showSoupTime = millis();
   }
 }
 
 function onBuyBreadPressed() {
-  if (coinCount >= 25) {
+  if (coinCount >= 25 && showBread == false) {
     coinCount -= 25;
     EmotionTimer += 250;
     showBread = true;
+    showBreadTime = millis();
   }
 }
 
 function onBuyPizzaPressed() {
-  if (coinCount >= 50) {
+  if (coinCount >= 50 && showPizza == false) {
     coinCount -= 50;
     EmotionTimer += 500;
     showPizza = true;
+    showPizzaTime = millis();
   }
 }
 
 function addCoin() {
-  if (timer && PomodoriTimer > 0) {
+  if (timer && PomodoroTimer > 0) {
     coinCount++;
   }
 }
@@ -361,9 +357,5 @@ function onShopClosePressed() {
   buttonBuySoup.hide();
   buttonBuyBread.hide();
   buttonBuyPizza.hide();
-  showShop = false;
-}
-
-if ((showShop = false)) {
   showShop = false;
 }
