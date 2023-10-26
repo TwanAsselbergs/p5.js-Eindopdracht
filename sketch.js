@@ -31,14 +31,78 @@ function preload() {
   breadImage = loadImage("Bread.png");
   soupImage = loadImage("Soup.png");
   pizzaImage = loadImage("Pizza.png");
+  backgroundImage = loadImage("TamagotchiBackground.jpg");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  backgroundImage = loadImage("TamagotchiBackground.jpg");
-  m_Timer = getItem("timer");
-  m_Timer2 = getItem("timer2");
-  coinCount = getItem("coinCount");
+
+  if (localStorage.getItem("timer")) {
+    m_Timer = parseInt(localStorage.getItem("timer"));
+  }
+
+  if (localStorage.getItem("timer2")) {
+    m_Timer2 = parseInt(localStorage.getItem("timer2"));
+  }
+  if (localStorage.getItem("coinCount")) {
+    coinCount = parseInt(localStorage.getItem("coinCount"));
+  }
+
+  strokeWeight(3);
+
+  startButton = createButton("Start");
+  startButton.position(560, 490);
+  startButton.size(75, 35);
+  startButton.style("background-color", "white");
+  startButton.style("font-size", "15px");
+  startButton.style("border-radius", "100%");
+  startButton.style("font-weight", "bold");
+  startButton.mousePressed(onStartPressed);
+
+  stopButton = createButton("Stop");
+  stopButton.position(860, 490);
+  stopButton.size(75, 35);
+  stopButton.style("background-color", "white");
+  stopButton.style("font-size", "15px");
+  stopButton.style("border-radius", "100%");
+  stopButton.style("font-weight", "bold");
+  stopButton.mousePressed(onStopPressed);
+
+  buttonPlus5 = createButton("+ 5");
+  buttonPlus5.position(610, 540);
+  buttonPlus5.size(75, 35);
+  buttonPlus5.style("background-color", "white");
+  buttonPlus5.style("font-size", "15px");
+  buttonPlus5.style("border-radius", "100%");
+  buttonPlus5.style("font-weight", "bold");
+  buttonPlus5.mousePressed(onPlus5Pressed);
+
+  buttonPlus10 = createButton("+ 10");
+  buttonPlus10.position(810, 540);
+  buttonPlus10.size(75, 35);
+  buttonPlus10.style("background-color", "white");
+  buttonPlus10.style("font-size", "15px");
+  buttonPlus10.style("border-radius", "100%");
+  buttonPlus10.style("font-weight", "bold");
+  buttonPlus10.mousePressed(onPlus10Pressed);
+
+  buttonReset0 = createButton("0");
+  buttonReset0.position(660, 590);
+  buttonReset0.size(75, 35);
+  buttonReset0.style("background-color", "white");
+  buttonReset0.style("font-size", "15px");
+  buttonReset0.style("border-radius", "100%");
+  buttonReset0.style("font-weight", "bold");
+  buttonReset0.mousePressed(onEndPressed);
+
+  buttonReset25 = createButton("25");
+  buttonReset25.position(760, 590);
+  buttonReset25.size(75, 35);
+  buttonReset25.style("background-color", "white");
+  buttonReset25.style("font-size", "15px");
+  buttonReset25.style("border-radius", "100%");
+  buttonReset25.style("font-weight", "bold");
+  buttonReset25.mousePressed(onResetPressed);
 
   if (coinCount == null) {
     coinCount = 0;
@@ -143,13 +207,22 @@ function draw() {
   textSize(20);
   text(round(m_Timer2), 855, 195);
 
+  buttonShop = createButton("Shop");
+  buttonShop.position(515, 215);
+  buttonShop.size(75, 35);
+  buttonShop.style("background-color", "white");
+  buttonShop.style("font-size", "15px");
+  buttonShop.style("border-radius", "100%");
+  buttonShop.style("font-weight", "bold");
+  buttonShop.mousePressed(onShopPressed);
+
   if (m_Timer2 >= 400) {
     image(tamagotchiImage2, 650, 180, 210, 210);
   } else if (m_Timer2 >= 250) {
     image(tamagotchiImage3, 645, 176, 215, 215);
   } else if (m_Timer2 >= 150) {
     image(tamagotchiImage4, 650, 180, 196, 196);
-  } else if (m_Timer2 < 50) {
+  } else if (m_Timer2 < 149) {
     image(tamagotchiImage5, 650, 185, 196, 196);
   }
 
@@ -160,71 +233,6 @@ function draw() {
   storeItem("timer", m_Timer);
   storeItem("timer2", m_Timer2);
   storeItem("coinCount", coinCount);
-
-  strokeWeight(3);
-
-  startButton = createButton("Start");
-  startButton.position(560, 490);
-  startButton.size(75, 35);
-  startButton.style("background-color", "white");
-  startButton.style("font-size", "15px");
-  startButton.style("border-radius", "100%");
-  startButton.style("font-weight", "bold");
-  startButton.mousePressed(onStartPressed);
-
-  stopButton = createButton("Stop");
-  stopButton.position(860, 490);
-  stopButton.size(75, 35);
-  stopButton.style("background-color", "white");
-  stopButton.style("font-size", "15px");
-  stopButton.style("border-radius", "100%");
-  stopButton.style("font-weight", "bold");
-  stopButton.mousePressed(onStopPressed);
-
-  buttonPlus5 = createButton("+ 5");
-  buttonPlus5.position(610, 540);
-  buttonPlus5.size(75, 35);
-  buttonPlus5.style("background-color", "white");
-  buttonPlus5.style("font-size", "15px");
-  buttonPlus5.style("border-radius", "100%");
-  buttonPlus5.style("font-weight", "bold");
-  buttonPlus5.mousePressed(onPlus5Pressed);
-
-  buttonPlus10 = createButton("+ 10");
-  buttonPlus10.position(810, 540);
-  buttonPlus10.size(75, 35);
-  buttonPlus10.style("background-color", "white");
-  buttonPlus10.style("font-size", "15px");
-  buttonPlus10.style("border-radius", "100%");
-  buttonPlus10.style("font-weight", "bold");
-  buttonPlus10.mousePressed(onPlus10Pressed);
-
-  buttonReset0 = createButton("0");
-  buttonReset0.position(660, 590);
-  buttonReset0.size(75, 35);
-  buttonReset0.style("background-color", "white");
-  buttonReset0.style("font-size", "15px");
-  buttonReset0.style("border-radius", "100%");
-  buttonReset0.style("font-weight", "bold");
-  buttonReset0.mousePressed(onEndPressed);
-
-  buttonReset25 = createButton("25");
-  buttonReset25.position(760, 590);
-  buttonReset25.size(75, 35);
-  buttonReset25.style("background-color", "white");
-  buttonReset25.style("font-size", "15px");
-  buttonReset25.style("border-radius", "100%");
-  buttonReset25.style("font-weight", "bold");
-  buttonReset25.mousePressed(onResetPressed);
-
-  buttonShop = createButton("Shop");
-  buttonShop.position(515, 215);
-  buttonShop.size(75, 35);
-  buttonShop.style("background-color", "white");
-  buttonShop.style("font-size", "15px");
-  buttonShop.style("border-radius", "100%");
-  buttonShop.style("font-weight", "bold");
-  buttonShop.mousePressed(onShopPressed);
 
   if (showShop == true) {
     fill(255, 255, 255);
@@ -272,6 +280,10 @@ function draw() {
       showPizza = false;
     }, 50 * 1000);
   }
+
+  localStorage.setItem("timer", m_Timer);
+  localStorage.setItem("timer2", m_Timer2);
+  localStorage.setItem("coinCount", coinCount);
 }
 
 function onStartPressed() {
@@ -299,10 +311,11 @@ function onPlus10Pressed() {
 
 function onEndPressed() {
   m_Timer = 0;
+  reward = false;
 }
 
 function onResetPressed() {
-  m_Timer = 1 * 5;
+  m_Timer = 25 * 60;
 }
 
 function onBuySoupPressed() {
